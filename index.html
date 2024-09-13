@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penge Ako Baon Kuya Ram</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f0f0f0;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        .yes-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .no-button {
+            background-color: #f44336;
+            color: white;
+            position: absolute; /* Ensure it can move around */
+        }
+        .message {
+            display: none;
+            font-size: 24px;
+            margin-top: 20px;
+            color: #4CAF50;
+            z-index: 2;
+        }
+        .confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+            display: none; /* Hide by default */
+        }
+        .no-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px;
+            color: red;
+            display: none;
+            z-index: 4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Penge ako baon kuya Ram?</h1>
+        <button class="yes-button" onclick="handleYes()">Yes</button>
+        <button class="no-button" onclick="handleNo()">No</button>
+        <div class="message" id="thankYouMessage">
+            Thank You! <br>
+            Eto GCASH number ko: 09991834229
+        </div>
+    </div>
+    <div class="confetti" id="confetti"></div>
+    <div class="no-overlay" id="noOverlay">Bawal No</div>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        let noButton = document.querySelector('.no-button');
+        let clickCount = 0;
+        let container = document.querySelector('.container');
+
+        function handleYes() {
+            // Show confetti animation
+            let confettiCanvas = document.getElementById('confetti');
+            confettiCanvas.style.display = 'block';
+
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            // Immediately show the thank you message
+            document.getElementById('thankYouMessage').style.display = 'block';
+            noButton.style.display = 'none'; // Hide the "No" button
+
+            // Hide confetti after animation completes
+            setTimeout(() => {
+                confettiCanvas.style.display = 'none';
+            }, 3000); // Confetti for 3 seconds
+        }
+
+        function handleNo() {
+            clickCount++;
+            if (clickCount >= 10) {
+                document.getElementById('noOverlay').style.display = 'flex';
+                noButton.style.display = 'none'; // Hide the "No" button
+            } else {
+                moveNoButton();
+            }
+        }
+
+        function moveNoButton() {
+            let containerRect = container.getBoundingClientRect();
+            let newTop = Math.random() * (containerRect.height - noButton.offsetHeight) + 'px';
+            let newLeft = Math.random() * (containerRect.width - noButton.offsetWidth) + 'px';
+
+            noButton.style.top = newTop;
+            noButton.style.left = newLeft;
+        }
+    </script>
+</body>
+</html>
